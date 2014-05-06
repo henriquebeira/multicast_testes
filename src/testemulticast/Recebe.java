@@ -38,9 +38,12 @@ public class Recebe implements Runnable{
                 for (int i = 0; i < 3; i++) {		// get messages from others in group
                     DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
                     s.receive(messageIn);
-                    System.out.println(num+" recebeu: " + new String(messageIn.getData()));
+                    System.out.println("Processo "+num+" recebeu: " + new String(messageIn.getData()));
                 }
+                break;
             }
+            //Após eleição, cria lista com número do Processo, porta, arquivo.
+            
         } catch (SocketException e) {
             System.out.println("Socket: " + e.getMessage());
         } catch (IOException e) {

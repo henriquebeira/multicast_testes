@@ -13,7 +13,7 @@ package testemulticast;
 public class Operador2 {
 
     public static void main(String args[]) throws InterruptedException {
-        Thread thread1 = new Thread(new Envio(2, 10000));
+        Thread thread1 = new Thread(new Envio(2, 5000, 7892));
         Thread thread2 = new Thread(new Recebe(2));
         thread1.start();
         thread2.start();

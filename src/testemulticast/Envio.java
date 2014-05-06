@@ -20,11 +20,12 @@ import java.util.logging.Logger;
  */
 public class Envio implements Runnable {
 
-    private int num, tempo;
+    private int numeroProcesso, tempo, porta;
 
-    Envio(int s, int tempo) {
-        num = s;
+    Envio(int s, int tempo, int porta) {
+        numeroProcesso = s;
         this.tempo = tempo;
+        this.porta = porta;
     }
     
     @Override
@@ -37,15 +38,17 @@ public class Envio implements Runnable {
             s = new MulticastSocket(6789);
             s.joinGroup(group);
             //byte[] m = args[0].getBytes();
+            long voto = (long) (0 + Math.random() * 10000);
+            byte[] mensagem = (numeroProcesso+";"+porta+";"+voto).getBytes();
             while (true) {
-                byte[] m = ("oi de "+num).getBytes();
-                DatagramPacket messageOut = new DatagramPacket(m, m.length, group, 6789);
-                s.send(messageOut);
-                //Thread.sleep(tempo);
-                long tempo = (long) (0 + Math.random()*10000);
-                System.out.println(tempo);
-                Thread.sleep(tempo);
+                for (int i = 0; i < 3; i++) {		// get messages from others in group
+                    DatagramPacket messageOut = new DatagramPacket(mensagem, mensagem.length, group, 6789);
+                    s.send(messageOut);
+                    Thread.sleep(tempo);
+                }
+                break;
             }
+            
         } catch (SocketException e) {
             System.out.println("Socket: " + e.getMessage());
         } catch (IOException e) {
