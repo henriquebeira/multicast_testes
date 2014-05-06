@@ -31,14 +31,15 @@
 
 import java.io.*;
 import java.security.*;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 
-class GenSig {
+class GenSig_dados2 {
 
     public static void main(String[] args) {
         
-        String args0_suepk = "C:\\arquivos_chorare\\client\\suepk";
         String args1_sig = "C:\\arquivos_chorare\\client\\sig";
-        String args2_dados = "C:\\arquivos_chorare\\client\\dados.txt";
+        String args2_dados = "C:\\arquivos_chorare\\client\\dados2.txt";
         String args3_privkey = "C:\\arquivos_chorare\\client\\privkey";
 
         /* Generate a DSA signature */
@@ -47,20 +48,23 @@ class GenSig {
         } else {*/
             try {
 
-                /* Generate a key pair */
-                KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA");
-                SecureRandom random = new SecureRandom(); //gera um numero aleatório seguro
+                /* import encoded private key */
+                FileInputStream keyfis = new FileInputStream(args3_privkey);
+                byte[] encKey = new byte[keyfis.available()];
+                keyfis.read(encKey);
+                keyfis.close();
 
-                keyGen.initialize(1024, random); //chaves de 1024 bits
+                System.out.println("importado");
+                PKCS8EncodedKeySpec privKeySpec = new  PKCS8EncodedKeySpec(encKey);
 
-                KeyPair pair = keyGen.generateKeyPair(); //Gera as chaves pública e privada
-                PrivateKey priv = pair.getPrivate(); //chave privada
-                PublicKey pub = pair.getPublic(); //chave pública
-
+                KeyFactory keyFactory = KeyFactory.getInstance("DSA");
+                PrivateKey privKey = keyFactory.generatePrivate(privKeySpec);
+                
+                System.out.println("privada recuperada");
                 /* Create a Signature object and initialize it with the private key */
                 Signature rsa = Signature.getInstance("DSA");
 
-                rsa.initSign(priv);
+                rsa.initSign(privKey);
 
                 /* Update and sign the data */
                 FileInputStream fis = new FileInputStream(args2_dados);
@@ -71,7 +75,7 @@ class GenSig {
                     len = bufin.read(buffer);
                     rsa.update(buffer, 0, len);
                 };
-
+                System.out.println("assinado...");
                 bufin.close();
 
                 /* Now that all the data to be signed has been read in, 
@@ -83,21 +87,6 @@ class GenSig {
                 sigfos.write(realSig);
 
                 sigfos.close();
-
-
-                /* Save the public key in a file */
-                byte[] key = pub.getEncoded();
-                FileOutputStream keyfos = new FileOutputStream(args0_suepk);
-                keyfos.write(key);
-
-                keyfos.close();
-                
-                /* Save the private key in a file */
-                byte[] privateKey = priv.getEncoded();
-                FileOutputStream privateKeyFos = new FileOutputStream(args3_privkey);
-                privateKeyFos.write(privateKey);
-
-                privateKeyFos.close();
 
             } catch (Exception e) {
                 System.err.println("Caught exception " + e.toString());

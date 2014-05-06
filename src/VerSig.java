@@ -37,9 +37,9 @@ class VerSig {
 
     public static void main(String[] args) {
 
-        String args0 = "C:\\arquivos_chorare\\server\\suepk";
-        String args1 = "C:\\arquivos_chorare\\server\\sig";
-        String args2 = "C:\\arquivos_chorare\\server\\dados.txt";
+        String args0_suepk = "C:\\arquivos_chorare\\client\\suepk";
+        String args1_sig = "C:\\arquivos_chorare\\client\\sig";
+        String args2_dados = "C:\\arquivos_chorare\\client\\dados.txt";
         
         /* Verify a DSA signature */
         /*if (args.length != 3) {
@@ -48,7 +48,7 @@ class VerSig {
             try {
 
                 /* import encoded public key */
-                FileInputStream keyfis = new FileInputStream(args0);
+                FileInputStream keyfis = new FileInputStream(args0_suepk);
                 byte[] encKey = new byte[keyfis.available()];
                 keyfis.read(encKey);
 
@@ -60,7 +60,7 @@ class VerSig {
                 PublicKey pubKey = keyFactory.generatePublic(pubKeySpec);
 
                 /* input the signature bytes */
-                FileInputStream sigfis = new FileInputStream(args1);
+                FileInputStream sigfis = new FileInputStream(args1_sig);
                 byte[] sigToVerify = new byte[sigfis.available()];
                 sigfis.read(sigToVerify);
 
@@ -71,7 +71,7 @@ class VerSig {
                 sig.initVerify(pubKey);
 
                 /* Update and verify the data */
-                FileInputStream datafis = new FileInputStream(args2);
+                FileInputStream datafis = new FileInputStream(args2_dados);
                 BufferedInputStream bufin = new BufferedInputStream(datafis);
 
                 byte[] buffer = new byte[1024];
