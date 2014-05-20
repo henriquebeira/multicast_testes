@@ -37,9 +37,9 @@ class VerSig_dados2 {
 
     public static void main(String[] args) {
 
-        String args0_suepk = "C:\\arquivos_chorare\\client\\suepk";
-        String args1_sig = "C:\\arquivos_chorare\\client\\sig";
-        String args2_dados = "C:\\arquivos_chorare\\client\\dados2.txt";
+        String args0_suepk = "C:\\arquivos_chorare\\server\\suepk";
+        String args1_sig = "C:\\arquivos_chorare\\server\\sig";
+        String args2_dados = "C:\\arquivos_chorare\\server\\dados2.txt";
 
         try {
 
